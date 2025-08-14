@@ -1,0 +1,5 @@
+VIDEO_ID = "video_id"
+VIDEO_URL = "video_url"
+TITLE = "title"
+TRANSCRIPT = "transcript"
+CHANNEL_NAME = "channel_name"

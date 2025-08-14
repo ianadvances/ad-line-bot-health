@@ -1,0 +1,41 @@
+# Core dependencies
+numpy
+pandas
+python-dateutil
+pytz
+
+# Web frameworks
+flask
+gunicorn
+streamlit
+
+# Database and storage
+chromadb
+pysqlite3-binary
+
+# AI and ML
+openai
+FlagEmbedding
+
+# LINE Bot SDK
+line-bot-sdk
+
+# Google Cloud services
+google-cloud-storage
+google-generativeai
+
+# Environment and configuration
+python-dotenv
+
+# Video processing
+pytubefix
+faster-whisper
+deepmultilingualpunctuation
+
+# Web scraping and automation
+selenium
+youtube-transcript-api
+
+# Utilities
+tqdm
+matplotlib
