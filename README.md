@@ -57,43 +57,6 @@ ad-line-bot-health/
                 Google Cloud Storage <-> 對話歷史記錄
 ```
 
-## 快速開始
-
-### 開發環境設定
-
-1. 複製專案並安裝依賴：
-```bash
-git clone <repository-url>
-cd ad-line-bot-health
-pip install -r requirements.txt
-```
-
-2. 設定環境變數：
-```bash
-cp .env.example .env
-# 編輯 .env 檔案，填入必要的 API 金鑰
-```
-
-3. 執行應用程式：
-```bash
-# LINE Bot
-python src/apps/06_app_linebot.py
-
-# Streamlit 網頁介面
-python src/apps/06_app_streamlit.py
-```
-
-詳細設定說明請參考 [development-setup.md](docs/development-setup.md)。
-
-### 部署
-
-專案支援多種部署方式：
-
-- **Google Cloud Functions**: 使用 `deployment/scripts/deploy-functions.sh`
-- **Google Cloud Run**: 使用 `deployment/scripts/deploy-cloud-run.sh`
-
-詳細部署說明請參考 [deployment-guide.md](docs/deployment-guide.md)。
-
 ## 資料處理流程
 
 ### 1. 資料收集與預處理
@@ -267,12 +230,6 @@ if youtube_urls:
 ### 4. 可擴展的知識庫
 
 專案的知識庫設計允許持續添加新的健康資訊，使系統能夠不斷學習和更新其知識庫，保持資訊的時效性和準確性。
-
-## 文件
-
-- [API 文件](docs/api-documentation.md) - API 端點和使用說明
-- [開發設定指南](docs/development-setup.md) - 本地開發環境設定
-- [部署指南](docs/deployment-guide.md) - 雲端部署說明
 
 ## 部署與擴展
 
