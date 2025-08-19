@@ -77,3 +77,6 @@ htmlcov/
 
 # Jupyter Notebook checkpoints
 .ipynb_checkpoints/
+
+# 環境
+.venv/
