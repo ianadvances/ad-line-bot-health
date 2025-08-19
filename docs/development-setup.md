@@ -112,12 +112,20 @@ cd src/apps
 python 06_app_linebot.py
 ```
 
-#### Streamlit 網頁應用程式
+#### Streamlit 網頁應用程式（推薦用於本地測試）
 
 ```bash
 cd src/apps
 streamlit run 06_app_streamlit.py
 ```
+
+**注意**: Streamlit 應用程式是測試整個系統功能的最佳方式，包括：
+- ChromaDB 資料庫連線
+- 嵌入模型整合
+- AI 回應生成
+- 相關文件檢索
+
+建議在開發過程中優先使用 Streamlit 應用程式進行功能驗證。
 
 ### 3. 資料庫管理
 
@@ -223,13 +231,31 @@ logger.info("除錯訊息")
 
 ### Streamlit 開發
 
+Streamlit 應用程式提供了一個完整的測試環境，可以驗證所有系統組件：
+
 ```bash
+# 基本執行
+streamlit run src/apps/06_app_streamlit.py
+
 # 使用自動重新載入執行
 streamlit run src/apps/06_app_streamlit.py --server.runOnSave true
 
 # 在特定連接埠執行
 streamlit run src/apps/06_app_streamlit.py --server.port 8501
 ```
+
+**功能測試項目**：
+- 資料庫連線和查詢
+- 嵌入模型 API 呼叫
+- OpenAI API 整合
+- 相關文件檢索
+- 聊天介面互動
+
+**建議測試流程**：
+1. 啟動 Streamlit 應用程式
+2. 輸入測試問題驗證回應品質
+3. 檢查相關影片連結是否正確
+4. 測試對話歷史功能
 
 ## 環境變數參考
 

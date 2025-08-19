@@ -11,6 +11,29 @@
 - 已安裝 Python 3.8+
 - 具有適當權限的 Google Cloud 專案存取權
 
+## 部署前測試
+
+**建議在部署前使用 Streamlit 應用程式進行本地測試**：
+
+```bash
+# 確保所有依賴套件已安裝
+pip install -r requirements.txt
+
+# 配置環境變數
+cp .env.example .env
+# 編輯 .env 檔案，填入必要的 API 金鑰
+
+# 執行本地測試
+cd src/apps
+streamlit run 06_app_streamlit.py
+```
+
+這將驗證：
+- 所有 API 金鑰配置正確
+- ChromaDB 資料庫可正常存取
+- 嵌入和聊天模型正常運作
+- 整體系統功能完整性
+
 ## 環境設定
 
 1. **配置 Google Cloud CLI**
