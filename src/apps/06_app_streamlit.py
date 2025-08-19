@@ -1,7 +1,6 @@
 import os
 import streamlit as st
 from dotenv import load_dotenv
-from FlagEmbedding import BGEM3FlagModel
 import chromadb
 from openai import OpenAI
 from typing import List, Dict
@@ -33,9 +32,19 @@ st.title("👨🏻‍⚕️ AI 保健室 🧑🏻‍⚕️")
 # 設定 OpenAI
 client = OpenAI(api_key=os.environ.get('OPENAI_API_KEY'))
 
-@st.cache_resource
-def get_embedding_model():
-    return BGEM3FlagModel('BAAI/bge-m3', use_fp16=True)
+# 設定 DeepInfra 客戶端
+deepinfra_client = OpenAI(
+    api_key=os.environ.get('DEEPINFRA_API_KEY'),
+    base_url="https://api.deepinfra.com/v1/openai",
+)
+
+def get_embedding(text: str) -> List[float]:
+    embeddings = deepinfra_client.embeddings.create(
+        model="BAAI/bge-m3",
+        input=text,
+        encoding_format="float"
+    )
+    return embeddings.data[0].embedding
 
 @st.cache_resource(ttl=24 * 3600)
 def configure_retriever():
@@ -43,10 +52,10 @@ def configure_retriever():
     collection = client.get_collection(name=CHROMA_DB)
     return collection
 
-def get_relevant_documents(query: str, collection, model, top_k: int = 3) -> List[Dict]:
-    query_embedding = model.encode(query, batch_size=1, max_length=8192)['dense_vecs']
+def get_relevant_documents(query: str, collection, top_k: int = 3) -> List[Dict]:
+    query_embedding = get_embedding(query)
     results = collection.query(
-        query_embeddings=[query_embedding.tolist()],
+        query_embeddings=[query_embedding],
         n_results=top_k,
         include=["documents", "metadatas"]
     )
@@ -76,7 +85,6 @@ def generate_response(messages: List[Dict]) -> str:
 def get_cumulative_query(messages: List[Dict]) -> str:
     return " ".join([msg["content"] for msg in messages if msg["role"] == "user"])
 
-embedding_model = get_embedding_model()
 collection = configure_retriever()
 
 # 初始化或取得聊天歷史
@@ -98,7 +106,7 @@ if user_query := st.chat_input(placeholder="請輸入您的問題"):
     cumulative_query = get_cumulative_query(st.session_state.messages)
     
     # 取得相關文件
-    relevant_docs = get_relevant_documents(cumulative_query, collection, embedding_model, top_k=3)
+    relevant_docs = get_relevant_documents(cumulative_query, collection, top_k=3)
     context = relevant_docs[0]['page_content'] if relevant_docs else ""
 
     # 準備傳送給 AI 的訊息
@@ -121,17 +129,11 @@ if user_query := st.chat_input(placeholder="請輸入您的問題"):
             youtube_url = f"https://www.youtube.com/watch?v={video_id}"
             st.write(f"{i}. [{youtube_url}]({youtube_url})")
 
-    # 在對話框外加入檢視相關影片的按鈕
-    for i, doc in enumerate(relevant_docs, 1):
-        video_id = doc['metadata']['video_id']
-        youtube_url = f"https://www.youtube.com/watch?v={video_id}"
-        if st.button(f"檢視相關影片 {i}"):
-            st.video(youtube_url)
-
 # 側邊欄
 st.sidebar.title("設定")
 if st.sidebar.button("清除對話歷史"):
     st.session_state.messages = [{"role": "assistant", "content": INIT_MESSAGE}]
+    st.rerun()
 st.sidebar.info("這是一個基於 AI 的健康諮詢師")
 
 if __name__ == "__main__":
